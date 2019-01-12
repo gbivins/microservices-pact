@@ -1,5 +1,4 @@
 = Spring Boot Microservices + Pact-JVM
-Matt Stine <mstine@pivotal.io>
 
 This project contains a *very simple* demo of using http://martinfowler.com/articles/consumerDrivenContracts.html[consumer-driven contracts] to verify the interactions between microservices.
 It leverages http://projects.spring.io/spring-boot[Spring Boot] for both the provider and consumer services.
@@ -8,10 +7,10 @@ Testing is achieved using the https://github.com/DiUS/pact-jvm[pact-jvm] project
 
 == Running the Demo
 
-. Run the tests using Gradle:
+. Run the tests using Maven:
 +
 ----
-$ gradle test
+$ mvn verify 
 ----
 
 . This will result in the creation of a https://github.com/realestate-com-au/pact/wiki/Terminology#pact-file[pact file] called `Foo_Consumer-Foo_Provider.json` at `microservices-pact/microservices-pact-consumer/target/pacts`. Here's a current example:
@@ -55,39 +54,16 @@ $ gradle test
 +
 By virtue of the fact that these tests pass, we know that the `microservices-pact-consumer` app interacts appropriately with the contract as defined in link:microservices-pact-consumer/src/test/java/io/pivotal/microservices/pact/consumer/ConsumerPortTest.java[ConsumerPortTest.java].
 
-. Next, we want to verify that the `microservices-pact-provider` app actually provides the expected contract. First, build the apps:
-+
-----
-$ gradle assemble
+In the output of the tests, you should see output along these lines:
 ----
 
-. Next, in one terminal window, start up the provider app:
-+
-----
-$ java -jar microservices-pact-provider/build/libs/microservices-pact-provider-0.0.1-SNAPSHOT.jar
-----
-
-. Then, in another terminal window, run the pact verification:
-+
-----
-$ gradle pactVerify
-----
-+
-You should see output along these lines:
-+
-----
-$ gradle pactVerify
-:microservices-pact-provider:pactVerify_fooProvider
-
-Verifying a pact between fooConsumer and fooProvider
-  [Using file /Users/pivotal/workspace/microservices-pact/microservices-pact-consumer/target/pacts/Foo_Consumer-Foo_Provider.json]
+Verifying a pact between microservice-consumer and microservice-provider
   a request for Foos
     returns a response which
       has status code 200 (OK)
       includes headers
         "Content-Type" with value "application/json;charset=UTF-8" (OK)
       has a matching body (OK)
-:microservices-pact-provider:pactVerify
 
 BUILD SUCCESSFUL
 ----
